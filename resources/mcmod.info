@@ -1,0 +1,16 @@
+[
+{
+  "modid": "quickhomes",
+  "name": "Quick Homes",
+  "description": "This mod adds a quick and easy way to set homes with /sethome and /home",
+  "version": "1.0",
+  "mcversion": "1.12.1",
+  "url": "http://itsmeow.net16.net",
+  "updateUrl": "https://minecraft.curseforge.com/projects/quickhomes",
+  "authorList": ["its_meow"],
+  "credits": "its_meow, for programming, ideas, design, and leading(formerly known as hiotewdew)",
+  "logoFile": "quickhomes.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
