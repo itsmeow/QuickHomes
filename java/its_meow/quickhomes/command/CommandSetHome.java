@@ -28,6 +28,15 @@ public class CommandSetHome extends CommandBase {
 	public String getUsage(ICommandSender sender) {
 		return "Use /sethome to set home location.";
 	}
+	
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		if(sender instanceof EntityPlayer) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {

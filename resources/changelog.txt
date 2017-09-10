@@ -1,3 +1,11 @@
 -
-1.0
+v1.1
+ -Fixed op requirement on sethome and home.
+ -Mod not needed client-side to join a server with it installed.
+ -Fixed inability to teleport with ten blocks of home.
+ -Cleaned teleport code.
+ -Mod works on singleplayer correctly.
+
+-
+v1.0
  -Initial creation. Has /home and /sethome. Singular homes.

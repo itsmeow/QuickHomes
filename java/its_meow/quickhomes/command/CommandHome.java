@@ -29,11 +29,20 @@ public class CommandHome extends CommandBase {
 	public String getUsage(ICommandSender sender) {
 		return "/home";
 	}
-	
+
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		if(sender instanceof EntityPlayer) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public static void print(String in) {
 		System.out.println(in);
 	}
-	
+
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length == 0)
@@ -41,36 +50,40 @@ public class CommandHome extends CommandBase {
 			int dimId = sender.getEntityWorld().provider.getDimension();
 			EntityPlayerMP senderMP = (EntityPlayerMP) sender;
 			PlayerList list = server.getPlayerList();
-			
+
 			BlockPos pos = sender.getPosition();
-            EntityPlayer senderP = (EntityPlayer) sender;
-            File dataDir = new File(server.getDataDirectory().getAbsolutePath());
-            File lDataDir = new File(dataDir.getAbsolutePath() + "\\quickhomes");
-            File pDataFile = new File(lDataDir.getAbsolutePath() + "\\" + senderP.getUniqueID() + ".txt");
-            if(!lDataDir.exists()) {
-            	lDataDir.mkdir();
-            }
-            if(!pDataFile.exists()) {
+			EntityPlayer senderP = (EntityPlayer) sender;
+			File dataDir = new File(server.getDataDirectory().getAbsolutePath());
+			File lDataDir = new File(dataDir.getAbsolutePath() + "\\quickhomes");
+			File pDataFile = new File(lDataDir.getAbsolutePath() + "\\" + senderP.getUniqueID() + ".txt");
+			if(!lDataDir.exists()) {
+				lDataDir.mkdir();
+			}
+			if(!pDataFile.exists()) {
 				throw new CommandException("Please set a home first!");
-            } else {
-            	Scanner sc;
+			} else {
+				Scanner sc;
 				try {
 					sc = new Scanner(pDataFile);
-	            	int destWorldId = Integer.parseInt(sc.nextLine());
-	            	int posX = Integer.parseInt(sc.nextLine());
-	            	int posY = Integer.parseInt(sc.nextLine());
-	            	int posZ = Integer.parseInt(sc.nextLine());
-	            	BlockPos newPos = new BlockPos(posX, posY, posZ);
-	            	sc.close();
-	    			WorldServer destWorld = server.getWorld(destWorldId);
-	    			if(!(destWorld == server.getWorld(dimId))){
-	    				list.transferPlayerToDimension(senderMP, destWorldId, new HomeTeleporter(destWorld));
-	    			}
-	    			senderP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYaw, 0.0F);
-	    			senderP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYaw, 0.0F);
-	    			senderP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYaw, 0.0F); //TODO: Instead of these stupid repeats to ensure it happens, make it happen!
+					int destWorldId = Integer.parseInt(sc.nextLine());
+					int posX = Integer.parseInt(sc.nextLine());
+					int posY = Integer.parseInt(sc.nextLine());
+					int posZ = Integer.parseInt(sc.nextLine());
+					BlockPos newPos = new BlockPos(posX, posY, posZ);
+					sc.close();
+					WorldServer destWorld = server.getWorld(destWorldId);
+					if(!(destWorld == server.getWorld(dimId))){
+						list.transferPlayerToDimension(senderMP, destWorldId, new HomeTeleporter(destWorld));
+					}
+					//senderMP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYawHead, 0.0F);
+					//senderMP.moveToBlockPosAndAngles(newPos, senderP.rotationYawHead, 0.0F);
+					senderMP.setPositionAndUpdate(posX, posY, posZ);
+					//senderP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYawHead, 0.0F);
+					//senderP.moveToBlockPosAndAngles(newPos, senderP.rotationYawHead, 0.0F);
+					senderP.setPositionAndUpdate(posX, posY, posZ);
+					/* I congratulate myself for finally fixing this. IT'S CLEAN! It teleports perfectly! */
 				} catch (FileNotFoundException e) {}	
-            }
+			}
 		} else {
 			throw new WrongUsageException("No arguments required, use /home");
 		}
