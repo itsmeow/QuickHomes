@@ -36,6 +36,10 @@ public class HomeTeleporter extends Teleporter{
 		this.coordCalc = doCoordCalc;
 	}
 
+
+	double ii;
+	double kk;
+	
 	@Override
 	public void placeInPortal(Entity entityIn, float rotationYaw){
 		if(coordCalc) {
@@ -59,27 +63,19 @@ public class HomeTeleporter extends Teleporter{
 				entityIn.motionZ = 0.0D;
 			} catch(Exception e) {}
 		} else {
-			//entityIn.setLocationAndAngles(entityIn.posX, entityIn., z, yaw, pitch);
+			double i = entityIn.posX; ii=i;
+			double j = entityIn.posY - 1;
+			double k = entityIn.posZ; kk=k;
+			entityIn.setLocationAndAngles((double)i, (double)j, (double)k, entityIn.rotationYaw, 0.0F);
+            entityIn.motionX = 0.0D;
+            entityIn.motionY = 0.0D;
+            entityIn.motionZ = 0.0D;
 		}
 	}
 
 	@Override
 	public boolean placeInExistingPortal(Entity entityIn, float p_180620_2_) {
 		return false;
-	}
-
-	private boolean isPositionClear(BlockPos pos) {
-		return true;
-	}
-
-
-	public class PortalPosition extends BlockPos{
-		public long lastUpdateTime;
-
-		public PortalPosition(BlockPos pos, long lastUpdate){
-			super(pos.getX(), pos.getY(), pos.getZ());
-			this.lastUpdateTime = lastUpdate;
-		}
 	}
 
 }
