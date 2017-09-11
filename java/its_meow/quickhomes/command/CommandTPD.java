@@ -70,6 +70,8 @@ public class CommandTPD extends CommandBase {
 			PlayerList list = server.getPlayerList();
 			WorldServer destWorld = server.getWorld(id);
 			list.transferPlayerToDimension(senderMP, id, new HomeTeleporter(destWorld, false));
+			BlockPos destPos = destWorld.getSpawnPoint();
+			senderMP.setPositionAndUpdate(destPos.getX(), destPos.getY(), destPos.getZ());
 		}
 	}
 

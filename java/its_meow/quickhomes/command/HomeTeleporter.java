@@ -35,10 +35,6 @@ public class HomeTeleporter extends Teleporter{
 		this.random = new Random(worldIn.getSeed());
 		this.coordCalc = doCoordCalc;
 	}
-
-
-	double ii;
-	double kk;
 	
 	@Override
 	public void placeInPortal(Entity entityIn, float rotationYaw){
@@ -63,13 +59,8 @@ public class HomeTeleporter extends Teleporter{
 				entityIn.motionZ = 0.0D;
 			} catch(Exception e) {}
 		} else {
-			double i = entityIn.posX; ii=i;
-			double j = entityIn.posY - 1;
-			double k = entityIn.posZ; kk=k;
-			entityIn.setLocationAndAngles((double)i, (double)j, (double)k, entityIn.rotationYaw, 0.0F);
-            entityIn.motionX = 0.0D;
-            entityIn.motionY = 0.0D;
-            entityIn.motionZ = 0.0D;
+			//BlockPos pos = entityIn.getEntityWorld().getSpawnPoint(); //TO\DO: Move to TPD class, change to DESTINATION world not CURRENT.
+			//entityIn.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), entityIn.rotationYaw, 0.0F);
 		}
 	}
 
