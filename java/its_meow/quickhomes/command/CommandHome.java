@@ -73,7 +73,7 @@ public class CommandHome extends CommandBase {
 					sc.close();
 					WorldServer destWorld = server.getWorld(destWorldId);
 					if(!(destWorld == server.getWorld(dimId))){
-						list.transferPlayerToDimension(senderMP, destWorldId, new HomeTeleporter(destWorld));
+						list.transferPlayerToDimension(senderMP, destWorldId, new HomeTeleporter(destWorld, true));
 					}
 					//senderMP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYawHead, 0.0F);
 					//senderMP.moveToBlockPosAndAngles(newPos, senderP.rotationYawHead, 0.0F);

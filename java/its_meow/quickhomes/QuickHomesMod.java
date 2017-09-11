@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 
 import its_meow.quickhomes.command.CommandHome;
 import its_meow.quickhomes.command.CommandSetHome;
+import its_meow.quickhomes.command.CommandTPD;
 import its_meow.quickhomes.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -46,6 +47,7 @@ public class QuickHomesMod {
 	public void onServerStarting(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandSetHome());
 		event.registerServerCommand(new CommandHome());
+		event.registerServerCommand(new CommandTPD());
 	}
 	
 }

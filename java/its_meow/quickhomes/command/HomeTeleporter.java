@@ -27,34 +27,40 @@ import net.minecraft.world.WorldServer;
 public class HomeTeleporter extends Teleporter{
 	private final WorldServer worldServerInstance;
 	private final Random random;
+	private boolean coordCalc;
 
-	public HomeTeleporter(WorldServer worldIn) {
+	public HomeTeleporter(WorldServer worldIn, boolean doCoordCalc) {
 		super(worldIn);
 		this.worldServerInstance = worldIn;
 		this.random = new Random(worldIn.getSeed());
+		this.coordCalc = doCoordCalc;
 	}
 
 	@Override
 	public void placeInPortal(Entity entityIn, float rotationYaw){
-		EntityPlayerMP senderMP = (EntityPlayerMP) entityIn;
-		MinecraftServer server = entityIn.getServer();
-		File dataDir = new File(server.getDataDirectory().getAbsolutePath());
-		EntityPlayer senderP = (EntityPlayer) entityIn;
-		File lDataDir = new File(dataDir.getAbsolutePath() + "\\quickhomes");
-		File pDataFile = new File(lDataDir.getAbsolutePath() + "\\" + senderP.getUniqueID() + ".txt");
-		Scanner sc;
-		try {
-			sc = new Scanner(pDataFile);
-			sc.nextLine();
-			int posX = Integer.parseInt(sc.nextLine());
-			int posY = Integer.parseInt(sc.nextLine());
-			int posZ = Integer.parseInt(sc.nextLine());
-			sc.close();
-			entityIn.setLocationAndAngles(posX, posY, posZ, entityIn.rotationYaw, 0.0F);
-			entityIn.motionX = 0.0D;
-			entityIn.motionY = 0.0D;
-			entityIn.motionZ = 0.0D;
-		} catch(Exception e) {}
+		if(coordCalc) {
+			EntityPlayerMP senderMP = (EntityPlayerMP) entityIn;
+			MinecraftServer server = entityIn.getServer();
+			File dataDir = new File(server.getDataDirectory().getAbsolutePath());
+			EntityPlayer senderP = (EntityPlayer) entityIn;
+			File lDataDir = new File(dataDir.getAbsolutePath() + "\\quickhomes");
+			File pDataFile = new File(lDataDir.getAbsolutePath() + "\\" + senderP.getUniqueID() + ".txt");
+			Scanner sc;
+			try {
+				sc = new Scanner(pDataFile);
+				sc.nextLine();
+				int posX = Integer.parseInt(sc.nextLine());
+				int posY = Integer.parseInt(sc.nextLine());
+				int posZ = Integer.parseInt(sc.nextLine());
+				sc.close();
+				entityIn.setLocationAndAngles(posX, posY, posZ, entityIn.rotationYaw, 0.0F);
+				entityIn.motionX = 0.0D;
+				entityIn.motionY = 0.0D;
+				entityIn.motionZ = 0.0D;
+			} catch(Exception e) {}
+		} else {
+			//entityIn.setLocationAndAngles(entityIn.posX, entityIn., z, yaw, pitch);
+		}
 	}
 
 	@Override
