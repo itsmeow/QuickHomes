@@ -45,8 +45,8 @@ public class CommandSetHome extends CommandBase {
 				BlockPos pos = sender.getPosition();
 				EntityPlayer senderP = (EntityPlayer) sender;
 				File dataDir = new File(server.getDataDirectory().getAbsolutePath());
-				File lDataDir = new File(dataDir.getAbsolutePath() + "\\quickhomes");
-				File pDataFile = new File(lDataDir.getAbsolutePath() + "\\" + senderP.getUniqueID() + ".txt");
+				File lDataDir = new File(dataDir.getAbsolutePath() + "/quickhomes");
+				File pDataFile = new File(lDataDir.getAbsolutePath() + "/" + senderP.getUniqueID() + ".txt");
 				if(!lDataDir.exists()) {
 					lDataDir.mkdir();
 				}

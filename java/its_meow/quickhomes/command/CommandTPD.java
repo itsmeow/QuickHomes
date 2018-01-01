@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
@@ -69,10 +73,51 @@ public class CommandTPD extends CommandBase {
 			}
 			PlayerList list = server.getPlayerList();
 			WorldServer destWorld = server.getWorld(id);
-			list.transferPlayerToDimension(senderMP, id, new HomeTeleporter(destWorld, false));
-			BlockPos destPos = destWorld.getSpawnPoint();
-			senderMP.setPositionAndUpdate(destPos.getX(), destPos.getY(), destPos.getZ());
+			BlockPos pos = senderP.getPosition();
+			boolean foundBlock = false;
+			for(int i = 1; i > 0 && i < 255; i++) {
+				BlockPos pos1 = new BlockPos(pos.getX(), pos.getY() + i, pos.getZ());
+				BlockPos pos2 = new BlockPos(pos1.getX(), pos1.getY() + 1, pos1.getZ());
+				BlockPos pos3 = new BlockPos(pos1.getX(), pos1.getY() - 1, pos1.getZ());
+				//System.out.println("Mid: " + blockAt(destWorld, pos1) + " Upper: " + blockAt(destWorld, pos2) + " Lower: " + blockAt(destWorld, pos3));
+				if(blockAt(destWorld, pos1) instanceof BlockAir && blockAt(destWorld, pos2) instanceof BlockAir && !(blockAt(destWorld, pos3) instanceof BlockAir | blockAt(destWorld, pos3) instanceof BlockLiquid | destWorld.getBlockState(pos3) == Blocks.BEDROCK.getDefaultState())) {
+					pos = pos1;
+					foundBlock = true;
+					i = -1;
+				}
+			}
+			if(!foundBlock) {
+				for(int i = 254; i > 0 && i < 255; i--) {
+					BlockPos pos1 = new BlockPos(pos.getX(), pos.getY() - i, pos.getZ());
+					BlockPos pos2 = new BlockPos(pos1.getX(), pos1.getY() + 1, pos1.getZ());
+					BlockPos pos3 = new BlockPos(pos1.getX(), pos1.getY() - 1, pos1.getZ());
+					//System.out.println("Mid: " + blockAt(destWorld, pos1) + " Upper: " + blockAt(destWorld, pos2) + " Lower: " + blockAt(destWorld, pos3));
+					if(blockAt(destWorld, pos1) instanceof BlockAir && blockAt(destWorld, pos2) instanceof BlockAir && !(blockAt(destWorld, pos3) instanceof BlockAir | blockAt(destWorld, pos3) instanceof BlockLiquid | destWorld.getBlockState(pos3) == Blocks.BEDROCK.getDefaultState())) {
+						pos = pos1;
+						foundBlock = true;
+						i = -1;
+					}
+				}
+			}
+			if(destWorld == server.getWorld(1) && !foundBlock) {
+				pos = new BlockPos(4, 64, 0);
+				foundBlock = true;
+			}
+			if(!foundBlock) {
+				throw new CommandException("Unable to find safe location!");
+			} else {
+				if(world == server.getWorld(1)) {
+					senderMP.setWorld(destWorld);
+				}
+				list.transferPlayerToDimension(senderMP, id, new HomeTeleporter(destWorld, false));
+				senderP.setWorld(destWorld);
+				senderMP.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
+			}
 		}
+	}
+	
+	public Block blockAt(World worldIn, BlockPos posIn) {
+		return worldIn.getBlockState(posIn).getBlock();
 	}
 
 }
