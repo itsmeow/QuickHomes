@@ -35,7 +35,7 @@ public class HomeTeleporter extends Teleporter{
 		this.random = new Random(worldIn.getSeed());
 		this.coordCalc = doCoordCalc;
 	}
-	
+
 	@Override
 	public void placeInPortal(Entity entityIn, float rotationYaw){
 		if(coordCalc) {
@@ -43,21 +43,21 @@ public class HomeTeleporter extends Teleporter{
 			MinecraftServer server = entityIn.getServer();
 			File dataDir = new File(server.getDataDirectory().getAbsolutePath());
 			EntityPlayer senderP = (EntityPlayer) entityIn;
-			File lDataDir = new File(dataDir.getAbsolutePath() + "\\quickhomes");
-			File pDataFile = new File(lDataDir.getAbsolutePath() + "\\" + senderP.getUniqueID() + ".txt");
-			Scanner sc;
-			try {
-				sc = new Scanner(pDataFile);
-				sc.nextLine();
-				int posX = Integer.parseInt(sc.nextLine());
-				int posY = Integer.parseInt(sc.nextLine());
-				int posZ = Integer.parseInt(sc.nextLine());
-				sc.close();
-				entityIn.setLocationAndAngles(posX, posY, posZ, entityIn.rotationYaw, 0.0F);
-				entityIn.motionX = 0.0D;
-				entityIn.motionY = 0.0D;
-				entityIn.motionZ = 0.0D;
-			} catch(Exception e) {}
+
+			QHWorldStorage sd = QHWorldStorage.get(senderP.world);
+
+			int[] data = sd.data.getIntArray(senderP.getUniqueID().toString());
+
+			int destWorldId = data[0];
+			int posX = data[1];
+			int posY = data[2];
+			int posZ = data[3];
+			
+			entityIn.setLocationAndAngles(posX, posY, posZ, entityIn.rotationYaw, 0.0F);
+			entityIn.motionX = 0.0D;
+			entityIn.motionY = 0.0D;
+			entityIn.motionZ = 0.0D;
+
 		} else {
 			//BlockPos pos = entityIn.getEntityWorld().getSpawnPoint(); //TO\DO: Move to TPD class, change to DESTINATION world not CURRENT.
 			//entityIn.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), entityIn.rotationYaw, 0.0F);

@@ -28,7 +28,7 @@ public class CommandSetHome extends CommandBase {
 	public String getUsage(ICommandSender sender) {
 		return "Use /sethome to set home location.";
 	}
-	
+
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		if(sender instanceof EntityPlayer) {
@@ -44,44 +44,19 @@ public class CommandSetHome extends CommandBase {
 			if (args.length == 0) {
 				BlockPos pos = sender.getPosition();
 				EntityPlayer senderP = (EntityPlayer) sender;
-				File dataDir = new File(server.getDataDirectory().getAbsolutePath());
-				File lDataDir = new File(dataDir.getAbsolutePath() + "/quickhomes");
-				File pDataFile = new File(lDataDir.getAbsolutePath() + "/" + senderP.getUniqueID() + ".txt");
-				if(!lDataDir.exists()) {
-					lDataDir.mkdir();
-				}
-				if(!pDataFile.exists()) {
-					try {
-						pDataFile.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-						throw new CommandException("Failed to create user data file!");
-					}
-				} else {
-					pDataFile.delete();
-					try {
-						pDataFile.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-						throw new CommandException("Failed to recreate user data file!");
-					}
-				}
-				try {
-					PrintWriter pw = new PrintWriter(pDataFile);
-					pw.println(senderP.getEntityWorld().provider.getDimension());
-					pw.println(pos.getX());
-					pw.println(pos.getY());
-					pw.println(pos.getZ());
-					pw.close();
-					senderP.sendMessage(new TextComponentString("Home set."));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					throw new CommandException("Failed to find user data file!");
-				}
-			}
-			else
-			{
-				throw new WrongUsageException("No arguments required, use /sethome.");
+
+				QHWorldStorage sd = QHWorldStorage.get(senderP.world);
+
+				int[] arrayToStore = {0,0,0,0}; 
+				arrayToStore[0] = senderP.getEntityWorld().provider.getDimension();
+				arrayToStore[1] = pos.getX();
+				arrayToStore[2] = pos.getY();
+				arrayToStore[3] = pos.getZ();
+
+				sd.data.setIntArray(senderP.getUniqueID().toString(), arrayToStore);
+
+			} else {
+				throw new WrongUsageException("Command /sethome does not take any arguments.");
 			}
 		}
 	}

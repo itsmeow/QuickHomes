@@ -53,39 +53,27 @@ public class CommandHome extends CommandBase {
 
 			BlockPos pos = sender.getPosition();
 			EntityPlayer senderP = (EntityPlayer) sender;
-			File dataDir = new File(server.getDataDirectory().getAbsolutePath());
-			File lDataDir = new File(dataDir.getAbsolutePath() + "/quickhomes");
-			File pDataFile = new File(lDataDir.getAbsolutePath() + "/" + senderP.getUniqueID() + ".txt");
-			if(!lDataDir.exists()) {
-				lDataDir.mkdir();
-			}
-			if(!pDataFile.exists()) {
+			
+			QHWorldStorage sd = QHWorldStorage.get(senderP.world);
+			
+			int[] data = sd.data.getIntArray(senderP.getUniqueID().toString());
+			if(data.length <= 0) {
 				throw new CommandException("Please set a home first!");
 			} else {
-				Scanner sc;
-				try {
-					sc = new Scanner(pDataFile);
-					int destWorldId = Integer.parseInt(sc.nextLine());
-					int posX = Integer.parseInt(sc.nextLine());
-					int posY = Integer.parseInt(sc.nextLine());
-					int posZ = Integer.parseInt(sc.nextLine());
-					BlockPos newPos = new BlockPos(posX, posY, posZ);
-					sc.close();
-					WorldServer destWorld = server.getWorld(destWorldId);
-					if(!(destWorld == server.getWorld(dimId))){
-						list.transferPlayerToDimension(senderMP, destWorldId, new HomeTeleporter(destWorld, true));
-					}
-					//senderMP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYawHead, 0.0F);
-					//senderMP.moveToBlockPosAndAngles(newPos, senderP.rotationYawHead, 0.0F);
-					senderMP.setPositionAndUpdate(posX, posY, posZ);
-					//senderP.setLocationAndAngles(posX, posY, posZ, senderP.rotationYawHead, 0.0F);
-					//senderP.moveToBlockPosAndAngles(newPos, senderP.rotationYawHead, 0.0F);
-					senderP.setPositionAndUpdate(posX, posY, posZ);
-					/* I congratulate myself for finally fixing this. IT'S CLEAN! It teleports perfectly! */
-				} catch (FileNotFoundException e) {}	
+				int destWorldId = data[0];
+				int posX = data[1];
+				int posY = data[2];
+				int posZ = data[3];
+				BlockPos newPos = new BlockPos(posX, posY, posZ);
+				WorldServer destWorld = server.getWorld(destWorldId);
+				if(!(destWorld == server.getWorld(dimId))){
+					list.transferPlayerToDimension(senderMP, destWorldId, new HomeTeleporter(destWorld, true));
+				}
+				senderMP.setPositionAndUpdate(posX, posY, posZ);
+				senderP.setPositionAndUpdate(posX, posY, posZ);
 			}
 		} else {
-			throw new WrongUsageException("No arguments required, use /home");
+			throw new WrongUsageException("Command /home does not take any arguments.");
 		}
 	}
 
