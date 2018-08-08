@@ -36,8 +36,6 @@ public class QHWorldStorage extends WorldSavedData {
 		if(save == null) {
 			save = new QHWorldStorage();
 			world.getMapStorage().setData(DATA_NAME, save);
-		}else {
-			
 		}
 		return save;
 	}
