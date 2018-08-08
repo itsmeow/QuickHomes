@@ -31,11 +31,7 @@ public class CommandSetHome extends CommandBase {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		if(sender instanceof EntityPlayer) {
-			return true;
-		} else {
-			return false;
-		}
+		return sender instanceof EntityPlayer;
 	}
 
 	@Override
@@ -54,6 +50,7 @@ public class CommandSetHome extends CommandBase {
 				arrayToStore[3] = pos.getZ();
 
 				sd.data.setIntArray(senderP.getUniqueID().toString(), arrayToStore);
+				sd.markDirty();
 				sender.sendMessage(new TextComponentString("Home set."));
 			} else {
 				throw new WrongUsageException("Command /sethome does not take any arguments.");

@@ -32,11 +32,7 @@ public class CommandHome extends CommandBase {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		if(sender instanceof EntityPlayer) {
-			return true;
-		} else {
-			return false;
-		}
+		return sender instanceof EntityPlayer;
 	}
 
 	public static void print(String in) {
