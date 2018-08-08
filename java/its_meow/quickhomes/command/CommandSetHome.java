@@ -54,7 +54,7 @@ public class CommandSetHome extends CommandBase {
 				arrayToStore[3] = pos.getZ();
 
 				sd.data.setIntArray(senderP.getUniqueID().toString(), arrayToStore);
-
+				sender.sendMessage(new TextComponentString("Home set."));
 			} else {
 				throw new WrongUsageException("Command /sethome does not take any arguments.");
 			}
