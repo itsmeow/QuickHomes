@@ -1,2 +1,2 @@
 # QuickHomes
-My mod QuickHomes for Minecraft (Forge)
+A simple mod adding /home and /sethome
