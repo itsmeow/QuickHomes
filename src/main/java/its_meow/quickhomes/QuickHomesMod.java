@@ -5,10 +5,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,23 +34,23 @@ public class QuickHomesMod {
                 return false;
             }
         }).executes(command -> {
-            EntityPlayerMP player = command.getSource().asPlayer();
+            ServerPlayerEntity player = command.getSource().asPlayer();
 
 
-            NBTTagCompound playerD = player.getEntityData();
+            CompoundNBT playerD = player.getEntityData();
             if(playerD.contains(MOD_ID, NBT.TAG_COMPOUND)) {
-                NBTTagCompound data = playerD.getCompound(MOD_ID);
+                CompoundNBT data = playerD.getCompound(MOD_ID);
                 double posX = data.getDouble("x");
                 double posY = data.getDouble("y");
                 double posZ = data.getDouble("z");
                 int dim = data.getInt("dim");
                 if(dim != player.getServerWorld().getDimension().getType().getId()){
-                    player.server.getPlayerList().changePlayerDimension(player, DimensionType.getById(dim));
+                    player.changeDimension(DimensionType.getById(dim));
                 }
                 player.setPositionAndUpdate(posX, posY, posZ);
                 return 1;
             } else {
-                player.sendMessage(new TextComponentString("No home set."));
+                player.sendMessage(new StringTextComponent("No home set."));
             }
             return 0;
         }));
@@ -63,15 +63,15 @@ public class QuickHomesMod {
                 return false;
             }
         }).executes(command -> {
-            EntityPlayerMP player = command.getSource().asPlayer();
-            NBTTagCompound playerD = player.getEntityData();
-            NBTTagCompound data = new NBTTagCompound();
+            ServerPlayerEntity player = command.getSource().asPlayer();
+            CompoundNBT playerD = player.getEntityData();
+            CompoundNBT data = new CompoundNBT();
             data.putDouble("x", player.posX);
             data.putDouble("y", player.posY);
             data.putDouble("z", player.posZ);
             data.putInt("dim", player.getServerWorld().getDimension().getType().getId());
             playerD.put(MOD_ID, data);
-            player.sendMessage(new TextComponentString("Home set."));
+            player.sendMessage(new StringTextComponent("Home set."));
             return 1;
         }));
 
@@ -79,10 +79,10 @@ public class QuickHomesMod {
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        EntityPlayer player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
         if(!player.world.isRemote) {
-            player.sendMessage(new TextComponentString("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"));
-            player.sendMessage(new TextComponentString("You can use /sethome and /home with this mod installed."));
+            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"));
+            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."));
         }
     }
 

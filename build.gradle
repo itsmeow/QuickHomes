@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
-version = '1.13.2-1.2.3'
+version = '1.14.4-1.2.3'
 group = 'its_meow.quickhomes'
 archivesBaseName = 'quickhomes'
 
@@ -21,7 +21,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'stable', version: '47-1.13.2'
+    mappings channel: 'snapshot', version: '20190803-1.14.3'
 	
     runs {
         client {
@@ -47,7 +47,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.219'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.27'
 }
 
 tasks.withType(JavaCompile) {
