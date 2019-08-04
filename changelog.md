@@ -1,3 +1,7 @@
+v1.2.4 (1.13.2/1.14.4)
+-
+ -Fixed losing home upon death
+
 v1.2.3 (1.13.2/1.14.4)
 -
  -Removed /tpd
