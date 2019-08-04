@@ -85,5 +85,13 @@ public class QuickHomesMod {
             player.sendMessage(new TextComponentString("You can use /sethome and /home with this mod installed."));
         }
     }
+    
+    @SubscribeEvent
+    public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+        NBTTagCompound oldData = event.getOriginal().getEntityData();
+        if(oldData.contains(MOD_ID, NBT.TAG_COMPOUND)) {
+            event.getEntityPlayer().getEntityData().put(MOD_ID, oldData.getCompound(MOD_ID));
+        }
+    }
 
 }
