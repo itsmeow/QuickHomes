@@ -1,0 +1,14 @@
+modLoader="javafml" #mandatory
+loaderVersion="[24,)" #mandatory (24 is current forge version)
+issueTrackerURL="http://github.com/itsmeow/QuickHomes/issues" #optional
+displayURL="https://www.curseforge.com/minecraft/mc-mods/quickhomes" #optional
+logoFile="quickhomes.png" #optional
+credits="its_meow, for programming, ideas, design, and leading" #optional
+authors="its_meow" #optional
+[[mods]] #mandatory
+modId="quickhomes" #mandatory
+version="${file.jarVersion}" #mandatory
+displayName="QuickHomes" #mandatory
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+This mod adds a quick and easy way to set homes with /sethome and /home'''
