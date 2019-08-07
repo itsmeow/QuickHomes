@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
-version = '1.14.4-1.2.4'
+version = '1.14.4-1.2.4.1'
 group = 'its_meow.quickhomes'
 archivesBaseName = 'quickhomes'
 
@@ -47,7 +47,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.27'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.45'
 }
 
 tasks.withType(JavaCompile) {

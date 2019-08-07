@@ -1,3 +1,7 @@
+v1.2.4.1 (1.14.4)
+-
+ -Fixed mod for Forge 1.14.4-28.0.45+ (breaking changes present in .45)
+
 v1.2.4 (1.13.2/1.14.4)
 -
  -Fixed losing home upon death

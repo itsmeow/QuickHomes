@@ -11,10 +11,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 @Mod(QuickHomesMod.MOD_ID)
@@ -90,7 +90,7 @@ public class QuickHomesMod {
     public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
         CompoundNBT oldData = event.getOriginal().getEntityData();
         if(oldData.contains(MOD_ID, NBT.TAG_COMPOUND)) {
-            event.getEntityPlayer().getEntityData().put(MOD_ID, oldData.getCompound(MOD_ID));
+            event.getPlayer().getEntityData().put(MOD_ID, oldData.getCompound(MOD_ID));
         }
     }
 
