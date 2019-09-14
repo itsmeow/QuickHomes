@@ -37,7 +37,7 @@ public class QuickHomesMod {
             ServerPlayerEntity player = command.getSource().asPlayer();
 
 
-            CompoundNBT playerD = player.getEntityData();
+            CompoundNBT playerD = player.getPersistentData();
             if(playerD.contains(MOD_ID, NBT.TAG_COMPOUND)) {
                 CompoundNBT data = playerD.getCompound(MOD_ID);
                 double posX = data.getDouble("x");
@@ -64,7 +64,7 @@ public class QuickHomesMod {
             }
         }).executes(command -> {
             ServerPlayerEntity player = command.getSource().asPlayer();
-            CompoundNBT playerD = player.getEntityData();
+            CompoundNBT playerD = player.getPersistentData();
             CompoundNBT data = new CompoundNBT();
             data.putDouble("x", player.posX);
             data.putDouble("y", player.posY);
@@ -88,9 +88,9 @@ public class QuickHomesMod {
     
     @SubscribeEvent
     public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
-        CompoundNBT oldData = event.getOriginal().getEntityData();
+        CompoundNBT oldData = event.getOriginal().getPersistentData();
         if(oldData.contains(MOD_ID, NBT.TAG_COMPOUND)) {
-            event.getPlayer().getEntityData().put(MOD_ID, oldData.getCompound(MOD_ID));
+            event.getPlayer().getPersistentData().put(MOD_ID, oldData.getCompound(MOD_ID));
         }
     }
 

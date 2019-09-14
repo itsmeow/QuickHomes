@@ -12,21 +12,19 @@ apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 
-version = '1.14.4-1.2.4.1'
-group = 'its_meow.quickhomes'
-archivesBaseName = 'quickhomes'
+version = "${project.mc_version}-${project.mod_version}"
+group = "${project.maven_group}"
+archivesBaseName = "${project.mod_id}"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190803-1.14.3'
-	
+    mappings channel: project.mappings_channel, version: "${project.mappings_version}-${project.mappings_mc_version}"
+
     runs {
         client {
             workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
             mods {
                 quickhomes {
                     source sourceSets.main
@@ -36,7 +34,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
             mods {
                 quickhomes {
                     source sourceSets.main
@@ -47,7 +45,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.45'
+    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 }
 
 tasks.withType(JavaCompile) {
@@ -62,9 +60,9 @@ jar {
     manifest {
         attributes(["Specification-Title": archivesBaseName,
                     "Specification-Vendor": "its_meow",
-                    "Specification-Version": version,
+                    "Specification-Version": "${project.mod_version}",
                     "Implementation-Title": archivesBaseName,
-                    "Implementation-Version": version,
+                    "Implementation-Version": "${project.mod_version}",
                     "Implementation-Vendor" :"its_meow",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }

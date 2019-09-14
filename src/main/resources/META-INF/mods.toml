@@ -12,3 +12,9 @@ displayName="QuickHomes" #mandatory
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 This mod adds a quick and easy way to set homes with /sethome and /home'''
+[[dependencies.quickhomes]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28.1.0,)"
+    ordering="NONE"
+    side="BOTH"
