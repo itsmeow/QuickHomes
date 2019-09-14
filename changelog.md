@@ -1,3 +1,7 @@
+v1.2.4.2 (1.14.4)
+-
+ -Fixed mod for Forge 1.14.4-28.1.0+ (breaking changes in 28.1.0)
+
 v1.2.4.1 (1.14.4)
 -
  -Fixed mod for Forge 1.14.4-28.0.45+ (breaking changes present in .45)
