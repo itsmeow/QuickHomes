@@ -7,19 +7,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SPlayerAbilitiesPacket;
-import net.minecraft.network.play.server.SRespawnPacket;
-import net.minecraft.network.play.server.SServerDifficultyPacket;
-import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -70,11 +63,8 @@ public class QuickHomesMod {
                 double posX = data.getDouble("x");
                 double posY = data.getDouble("y");
                 double posZ = data.getDouble("z");
-                int dim = data.getInt("dim");
-                if(dim != player.getEntityWorld().getDimension().getType().getId()) {
-                    teleport(player, DimensionType.getById(dim));
-                }
-                player.setPositionAndUpdate(posX, posY, posZ);
+                String dim = data.getString("dim");
+                player.func_200619_a(player.getServer().func_71218_a(DimensionType.byName(new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
                 return 1;
             } else {
                 player.sendMessage(new StringTextComponent("No home set."));
@@ -93,10 +83,10 @@ public class QuickHomesMod {
             ServerPlayerEntity player = command.getSource().asPlayer();
             CompoundNBT playerD = player.getPersistentData();
             CompoundNBT data = new CompoundNBT();
-            data.putDouble("x", player.posX);
-            data.putDouble("y", player.posY);
-            data.putDouble("z", player.posZ);
-            data.putInt("dim", player.getEntityWorld().getDimension().getType().getId());
+            data.putDouble("x", player.func_226277_ct_());
+            data.putDouble("y", player.func_226278_cu_());
+            data.putDouble("z", player.func_226281_cx_());
+            data.putString("dim", player.getEntityWorld().getDimension().getType().getRegistryName().toString());
             playerD.put(MOD_ID, data);
             player.sendMessage(new StringTextComponent("Home set."));
             return 1;
@@ -119,62 +109,6 @@ public class QuickHomesMod {
         if(oldData.contains(MOD_ID, NBT.TAG_COMPOUND)) {
             event.getPlayer().getPersistentData().put(MOD_ID, oldData.getCompound(MOD_ID));
         }
-    }
-
-    @SuppressWarnings("resource")
-    public static Entity teleport(Entity entityIn, DimensionType dimensionTo) {
-        if(!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entityIn, dimensionTo)) {
-            return null;
-        }
-        if(!entityIn.getEntityWorld().isRemote && entityIn.isAlive()) {
-            final ServerWorld worldFrom = entityIn.getServer().func_71218_a(entityIn.dimension);
-            final ServerWorld worldTo = entityIn.getServer().func_71218_a(dimensionTo);
-            entityIn.dimension = dimensionTo;
-
-            if(entityIn instanceof ServerPlayerEntity) {
-                final ServerPlayerEntity entityPlayer = (ServerPlayerEntity) entityIn;
-                // Access Transformer exposes this field
-                entityPlayer.invulnerableDimensionChange = true;
-                // End Access Transformer
-                WorldInfo worldinfo = entityPlayer.world.getWorldInfo();
-                entityPlayer.connection.sendPacket(new SRespawnPacket(dimensionTo, worldinfo.getGenerator(),
-                entityPlayer.interactionManager.getGameType()));
-                entityPlayer.connection.sendPacket(
-                new SServerDifficultyPacket(worldinfo.getDifficulty(), worldinfo.isDifficultyLocked()));
-                PlayerList playerlist = entityPlayer.world.getServer().getPlayerList();
-                playerlist.updatePermissionLevel(entityPlayer);
-                worldFrom.removeEntity(entityPlayer, true); // Forge: the player entity is moved to the new world, NOT cloned. So keep the
-                                                            // data alive with no matching invalidate call.
-                entityPlayer.revive();
-                entityPlayer.setWorld(worldTo);
-                worldTo.func_217447_b(entityPlayer);
-                // entityPlayer.func_213846_b(worldFrom);
-                entityPlayer.interactionManager.func_73080_a(worldTo);
-                entityPlayer.connection.sendPacket(new SPlayerAbilitiesPacket(entityPlayer.abilities));
-                playerlist.func_72354_b(entityPlayer, worldTo);
-                playerlist.sendInventory(entityPlayer);
-
-                net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerChangedDimensionEvent(entityPlayer, entityPlayer.dimension, dimensionTo);
-                // entityPlayer.clearInvulnerableDimensionChange();
-                return entityPlayer;
-            }
-
-            entityIn.detach();
-            Entity copy = entityIn.getType().create(worldTo);
-            if(copy != null) {
-                copy.copyDataFromOld(entityIn);
-                copy.setMotion(entityIn.getMotion().mul(Vec3d.fromPitchYaw(entityIn.rotationPitch, entityIn.rotationYaw).normalize()));
-                // used to unnaturally add entities to world
-                worldTo.func_217460_e(copy);
-            }
-            // update world
-            worldFrom.resetUpdateEntityTick();
-            worldTo.resetUpdateEntityTick();
-            // remove old entity
-            entityIn.remove(false);
-            return copy;
-        }
-        return null;
     }
 
     public static class ServerConfig {
