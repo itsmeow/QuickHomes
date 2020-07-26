@@ -1,4 +1,4 @@
-package its_meow.quickhomes;
+package dev.itsmeow.quickhomes;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -10,9 +10,11 @@ import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -46,7 +48,7 @@ public class QuickHomesMod {
 
     @SubscribeEvent
     public static void onServerStarting(FMLServerStartingEvent event) {
-        CommandDispatcher<CommandSource> d = event.getCommandDispatcher();
+        CommandDispatcher<CommandSource> d = event.getServer().getCommandManager().getDispatcher();
         // Home command
         d.register(Commands.literal("home").requires(source -> {
             try {
@@ -64,10 +66,10 @@ public class QuickHomesMod {
                 double posY = data.getDouble("y");
                 double posZ = data.getDouble("z");
                 String dim = data.getString("dim");
-                player.func_200619_a(player.getServer().func_71218_a(DimensionType.byName(new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
+                player.teleport(player.getServer().getWorld(RegistryKey.of(Registry.field_239699_ae_, new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
                 return 1;
             } else {
-                player.sendMessage(new StringTextComponent("No home set."));
+                player.sendMessage(new StringTextComponent("No home set."), Util.NIL_UUID);
             }
             return 0;
         }));
@@ -83,12 +85,12 @@ public class QuickHomesMod {
             ServerPlayerEntity player = command.getSource().asPlayer();
             CompoundNBT playerD = player.getPersistentData();
             CompoundNBT data = new CompoundNBT();
-            data.putDouble("x", player.func_226277_ct_());
-            data.putDouble("y", player.func_226278_cu_());
-            data.putDouble("z", player.func_226281_cx_());
-            data.putString("dim", player.getEntityWorld().getDimension().getType().getRegistryName().toString());
+            data.putDouble("x", player.getX());
+            data.putDouble("y", player.getY());
+            data.putDouble("z", player.getZ());
+            data.putString("dim", player.getEntityWorld().getRegistryKey().getValue().toString());
             playerD.put(MOD_ID, data);
-            player.sendMessage(new StringTextComponent("Home set."));
+            player.sendMessage(new StringTextComponent("Home set."), Util.NIL_UUID);
             return 1;
         }));
 
@@ -98,8 +100,8 @@ public class QuickHomesMod {
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerEntity player = event.getPlayer();
         if(!player.world.isRemote && SERVER_CONFIG.joinMessageEnabled.get()) {
-            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"));
-            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."));
+            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"), Util.NIL_UUID);
+            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."), Util.NIL_UUID);
         }
     }
 

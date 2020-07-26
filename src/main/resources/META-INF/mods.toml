@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[31,)" #mandatory
+loaderVersion="[32,)" #mandatory
 issueTrackerURL="http://github.com/itsmeow/QuickHomes/issues" #optional
 displayURL="https://www.curseforge.com/minecraft/mc-mods/quickhomes" #optional
 logoFile="quickhomes.png" #optional
@@ -15,6 +15,6 @@ This mod adds a quick and easy way to set homes with /sethome and /home'''
 [[dependencies.quickhomes]]
     modId="forge"
     mandatory=true
-    versionRange="[31.1.0,)"
+    versionRange="[32.0.62,)"
     ordering="NONE"
     side="BOTH"
