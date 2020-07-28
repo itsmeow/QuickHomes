@@ -1,5 +1,6 @@
 modLoader="javafml" #mandatory
 loaderVersion="[32,)" #mandatory
+license="CC BY-NC-SA 4.0 IPL"
 issueTrackerURL="http://github.com/itsmeow/QuickHomes/issues" #optional
 displayURL="https://www.curseforge.com/minecraft/mc-mods/quickhomes" #optional
 logoFile="quickhomes.png" #optional
