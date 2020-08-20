@@ -66,7 +66,7 @@ public class QuickHomesMod {
                 double posY = data.getDouble("y");
                 double posZ = data.getDouble("z");
                 String dim = data.getString("dim");
-                player.teleport(player.getServer().getWorld(RegistryKey.of(Registry.field_239699_ae_, new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
+                player.teleport(player.getServer().getWorld(RegistryKey.of(Registry.DIMENSION, new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
                 return 1;
             } else {
                 player.sendMessage(new StringTextComponent("No home set."), Util.NIL_UUID);
