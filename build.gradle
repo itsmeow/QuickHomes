@@ -1,6 +1,1 @@
-repositories {
-    maven {
-        url "https://maven.tterrag.com/"
-    }
-}
 apply from: 'https://maven.itsmeow.dev/scripts/fg3.gradle'

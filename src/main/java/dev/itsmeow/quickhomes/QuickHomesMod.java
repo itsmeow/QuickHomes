@@ -66,10 +66,10 @@ public class QuickHomesMod {
                 double posY = data.getDouble("y");
                 double posZ = data.getDouble("z");
                 String dim = data.getString("dim");
-                player.teleport(player.getServer().getWorld(RegistryKey.of(Registry.DIMENSION, new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
+                player.teleport(player.getServer().getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(dim))), posX, posY, posZ, player.rotationYaw, player.rotationPitch);
                 return 1;
             } else {
-                player.sendMessage(new StringTextComponent("No home set."), Util.NIL_UUID);
+                player.sendMessage(new StringTextComponent("No home set."), Util.DUMMY_UUID);
             }
             return 0;
         }));
@@ -85,12 +85,12 @@ public class QuickHomesMod {
             ServerPlayerEntity player = command.getSource().asPlayer();
             CompoundNBT playerD = player.getPersistentData();
             CompoundNBT data = new CompoundNBT();
-            data.putDouble("x", player.getX());
-            data.putDouble("y", player.getY());
-            data.putDouble("z", player.getZ());
-            data.putString("dim", player.getEntityWorld().getRegistryKey().getValue().toString());
+            data.putDouble("x", player.getPosX());
+            data.putDouble("y", player.getPosY());
+            data.putDouble("z", player.getPosZ());
+            data.putString("dim", player.getEntityWorld().getDimensionKey().getLocation().toString());
             playerD.put(MOD_ID, data);
-            player.sendMessage(new StringTextComponent("Home set."), Util.NIL_UUID);
+            player.sendMessage(new StringTextComponent("Home set."), Util.DUMMY_UUID);
             return 1;
         }));
 
@@ -100,8 +100,8 @@ public class QuickHomesMod {
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         PlayerEntity player = event.getPlayer();
         if(!player.world.isRemote && SERVER_CONFIG.joinMessageEnabled.get()) {
-            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"), Util.NIL_UUID);
-            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."), Util.NIL_UUID);
+            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."), Util.DUMMY_UUID);
         }
     }
 
