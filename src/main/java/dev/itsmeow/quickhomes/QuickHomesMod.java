@@ -1,5 +1,6 @@
 package dev.itsmeow.quickhomes;
 
+import net.minecraftforge.event.RegisterCommandsEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -47,10 +48,35 @@ public class QuickHomesMod {
     }
 
     @SubscribeEvent
+    public static void onRegisterCommandEvent(RegisterCommandsEvent event) {
+        registerCommands(event.getDispatcher());
+    }
+
+    @SubscribeEvent
     public static void onServerStarting(FMLServerStartingEvent event) {
-        CommandDispatcher<CommandSource> d = event.getServer().getCommandManager().getDispatcher();
+        registerCommands(event.getServer().getCommandManager().getDispatcher());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        PlayerEntity player = event.getPlayer();
+        if(!player.world.isRemote && SERVER_CONFIG.joinMessageEnabled.get()) {
+            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."), Util.DUMMY_UUID);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
+        CompoundNBT oldData = event.getOriginal().getPersistentData();
+        if(oldData.contains(MOD_ID, NBT.TAG_COMPOUND)) {
+            event.getPlayer().getPersistentData().put(MOD_ID, oldData.getCompound(MOD_ID));
+        }
+    }
+
+    public static void registerCommands(CommandDispatcher<CommandSource> commandDispatcher) {
         // Home command
-        d.register(Commands.literal("home").requires(source -> {
+        commandDispatcher.register(Commands.literal("home").requires(source -> {
             try {
                 return source.asPlayer() != null;
             } catch(CommandSyntaxException e) {
@@ -75,7 +101,7 @@ public class QuickHomesMod {
         }));
 
         // Sethome command
-        d.register(Commands.literal("sethome").requires(source -> {
+        commandDispatcher.register(Commands.literal("sethome").requires(source -> {
             try {
                 return source.asPlayer() != null;
             } catch(CommandSyntaxException e) {
@@ -93,24 +119,6 @@ public class QuickHomesMod {
             player.sendMessage(new StringTextComponent("Home set."), Util.DUMMY_UUID);
             return 1;
         }));
-
-    }
-
-    @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        PlayerEntity player = event.getPlayer();
-        if(!player.world.isRemote && SERVER_CONFIG.joinMessageEnabled.get()) {
-            player.sendMessage(new StringTextComponent("This server is running QuickHomes " + ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion() + " by its_meow!"), Util.DUMMY_UUID);
-            player.sendMessage(new StringTextComponent("You can use /sethome and /home with this mod installed."), Util.DUMMY_UUID);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event) {
-        CompoundNBT oldData = event.getOriginal().getPersistentData();
-        if(oldData.contains(MOD_ID, NBT.TAG_COMPOUND)) {
-            event.getPlayer().getPersistentData().put(MOD_ID, oldData.getCompound(MOD_ID));
-        }
     }
 
     public static class ServerConfig {
