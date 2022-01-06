@@ -1,0 +1,20 @@
+apply from: 'https://maven.itsmeow.dev/scripts/architectury-fabric.gradle'
+configurations {
+    shadowImplementation
+    implementation.extendsFrom shadowImplementation
+}
+repositories {
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+}
+dependencies {
+    shadowImplementation "me.zeroeightsix:fiber:${rootProject.fiber_version}"
+    modRuntimeOnly("com.terraformersmc:modmenu:1.16.22") {
+        transitive = false
+    }
+}
+shadowJar {
+    configurations = [project.configurations.shadowCommon, project.configurations.shadowImplementation]
+}

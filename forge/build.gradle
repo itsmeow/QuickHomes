@@ -1,0 +1,6 @@
+apply from: 'https://maven.itsmeow.dev/scripts/architectury-forge.gradle'
+loom {
+    forge {
+        mixinConfig "quickhomes.mixins.json"
+    }
+}

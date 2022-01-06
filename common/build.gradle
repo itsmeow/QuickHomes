@@ -1,0 +1,1 @@
+apply from: 'https://maven.itsmeow.dev/scripts/architectury-common.gradle'

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "dev.itsmeow.quickhomes.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "mixins": [
+    "ServerPlayerMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,1 +1,12 @@
-apply from: 'https://maven.itsmeow.dev/scripts/fg3.gradle'
+plugins {
+    id "architectury-plugin" version "$architectury_plugin_version"
+    id "dev.architectury.loom" version "$loom_version" apply false
+}
+subprojects {
+    apply plugin: "dev.architectury.loom"
+}
+allprojects {
+    apply plugin: "architectury-plugin"
+}
+apply from: 'https://maven.itsmeow.dev/scripts/architectury-base.gradle'
+apply from: 'https://maven.itsmeow.dev/scripts/architectury-alphas.gradle'

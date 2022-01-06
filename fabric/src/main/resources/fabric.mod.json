@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "quickhomes",
+  "version": "${version}",
+  "name": "QuickHomes",
+  "description": "This mod adds a quick and easy way to set homes with /sethome and /home",
+  "authors": ["itsmeowdev"],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/quickhomes",
+    "sources": "https://github.com/itsmeow/QuickHomes",
+    "issues": "https://github.com/itsmeow/QuickHomes/issues"
+  },
+  "license": "MIT",
+  "icon": "quickhomes.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.itsmeow.quickhomes.QuickHomesModFabric"]
+  },
+  "depends": {
+    "minecraft": "1.16.5",
+    "fabricloader": ">=0.12.0",
+    "fabric": ">=0.32.0"
+  },
+  "mixins": [
+    "quickhomes.mixins.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.itsmeow.dev/"
+      }
+    }
+  }
+}
