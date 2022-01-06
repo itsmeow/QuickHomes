@@ -35,7 +35,7 @@ public class QuickHomesMod {
             ServerPlayer player = command.getSource().getPlayerOrException();
             Pair<Vec3, ResourceKey<Level>> home = ((IStoreHome) player).getHome();
             if(home.getLeft() != null && home.getRight() != null) {
-                player.teleportTo(player.getServer().getLevel(home.getRight()), home.getLeft().x, home.getLeft().y, home.getLeft().z, player.yRot, player.xRot);
+                player.teleportTo(player.getServer().getLevel(home.getRight()), home.getLeft().x, home.getLeft().y, home.getLeft().z, player.getYRot(), player.getXRot());
                 return 1;
             } else {
                 player.sendMessage(new TextComponent("No home set."), Util.NIL_UUID);
