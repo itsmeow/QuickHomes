@@ -17,7 +17,7 @@
     "main": ["dev.itsmeow.quickhomes.QuickHomesModFabric"]
   },
   "depends": {
-    "minecraft": "1.17.1",
+    "minecraft": "1.18.1",
     "fabricloader": ">=0.12.0",
     "fabric": ">=0.32.0"
   },

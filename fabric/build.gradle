@@ -11,7 +11,7 @@ repositories {
 }
 dependencies {
     shadowImplementation "me.zeroeightsix:fiber:${rootProject.fiber_version}"
-    modRuntimeOnly("com.terraformersmc:modmenu:2.0.14") {
+    modRuntimeOnly("com.terraformersmc:modmenu:3.0.1") {
         transitive = false
     }
 }
