@@ -1,7 +1,6 @@
 package dev.itsmeow.quickhomes.forge;
 
 import dev.itsmeow.quickhomes.QuickHomesMod;
-import dev.itsmeow.quickhomes.QuickHomesModForge;
 import net.minecraftforge.fml.ModList;
 
 public class QuickHomesModImpl {
