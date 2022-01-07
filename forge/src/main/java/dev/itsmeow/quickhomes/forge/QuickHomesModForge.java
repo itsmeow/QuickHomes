@@ -1,5 +1,6 @@
-package dev.itsmeow.quickhomes;
+package dev.itsmeow.quickhomes.forge;
 
+import dev.itsmeow.quickhomes.QuickHomesMod;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
