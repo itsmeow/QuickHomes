@@ -8,6 +8,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -33,8 +34,18 @@ public class QuickHomesMod {
         dispatcher.register(Commands.literal("home").requires(isPlayer).executes(command -> {
             ServerPlayer player = command.getSource().getPlayerOrException();
             Pair<Vec3, ResourceKey<Level>> home = ((IStoreHome) player).getHome();
-            if(home.getLeft() != null && home.getRight() != null) {
-                player.teleportTo(player.getServer().getLevel(home.getRight()), home.getLeft().x, home.getLeft().y, home.getLeft().z, player.getYRot(), player.getXRot());
+            Vec3 homePos = home.getLeft();
+            ResourceKey<Level> homeLevel = home.getRight();
+            if(homePos != null && homeLevel != null) {
+                if (player.isPassenger()) {
+                    Entity vehicle = player.getVehicle();
+                    // If player is not riding with or on another player, teleport the vehicle along with passengers.
+                    if (!vehicle.getPassengersAndSelf().anyMatch(entity -> (!entity.equals(player)) && entity instanceof Player)) {
+                        vehicle.teleportTo(homePos.x, homePos.y, homePos.z);
+                        return 1;
+                    }
+                }
+                player.teleportTo(player.getServer().getLevel(homeLevel), homePos.x, homePos.y, homePos.z, player.getYRot(), player.getXRot());
                 return 1;
             } else {
                 player.sendSystemMessage(Component.literal("No home set."));
