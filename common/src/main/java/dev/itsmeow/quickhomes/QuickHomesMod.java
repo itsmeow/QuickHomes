@@ -9,6 +9,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -35,7 +36,12 @@ public class QuickHomesMod {
             ServerPlayer player = command.getSource().getPlayerOrException();
             Pair<Vec3, ResourceKey<Level>> home = ((IStoreHome) player).getHome();
             if(home.getLeft() != null && home.getRight() != null) {
-                player.teleportTo(player.getServer().getLevel(home.getRight()), home.getLeft().x, home.getLeft().y, home.getLeft().z, player.getYRot(), player.getXRot());
+                if (player.isPassenger()) {
+                    Entity vehicle = player.getVehicle();
+                    vehicle.teleportTo(home.getLeft().x, home.getLeft().y, home.getLeft().z);
+                } else {
+                    player.teleportTo(player.getServer().getLevel(home.getRight()), home.getLeft().x, home.getLeft().y, home.getLeft().z, player.getYRot(), player.getXRot());
+                }
                 return 1;
             } else {
                 player.sendMessage(new TextComponent("No home set."), Util.NIL_UUID);
