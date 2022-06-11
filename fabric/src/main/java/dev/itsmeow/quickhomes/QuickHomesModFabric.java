@@ -9,7 +9,7 @@ import io.github.fablabsmc.fablabs.api.fiber.v1.tree.ConfigBranch;
 import io.github.fablabsmc.fablabs.api.fiber.v1.tree.ConfigTree;
 import io.github.fablabsmc.fablabs.api.fiber.v1.tree.PropertyMirror;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -27,7 +27,7 @@ public class QuickHomesModFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        CommandRegistrationCallback.EVENT.register((commandDispatcher, dedicated) -> QuickHomesMod.registerCommands(commandDispatcher));
+        CommandRegistrationCallback.EVENT.register((commandDispatcher, registryAccess, environment) -> QuickHomesMod.registerCommands(commandDispatcher));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             QuickHomesMod.onPlayerJoin(handler.player);
         });

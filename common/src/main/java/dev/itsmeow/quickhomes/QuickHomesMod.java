@@ -3,10 +3,9 @@ package dev.itsmeow.quickhomes;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -38,22 +37,22 @@ public class QuickHomesMod {
                 player.teleportTo(player.getServer().getLevel(home.getRight()), home.getLeft().x, home.getLeft().y, home.getLeft().z, player.getYRot(), player.getXRot());
                 return 1;
             } else {
-                player.sendMessage(new TextComponent("No home set."), Util.NIL_UUID);
+                player.sendSystemMessage(Component.literal("No home set."));
             }
             return 0;
         }));
         dispatcher.register(Commands.literal("sethome").requires(isPlayer).executes(command -> {
             ServerPlayer player = command.getSource().getPlayerOrException();
             ((IStoreHome) player).setHome(new Vec3(player.getX(), player.getY(), player.getZ()), player.getLevel().dimension());
-            player.sendMessage(new TextComponent("Home set."), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal("Home set."));
             return 1;
         }));
     }
 
     public static void onPlayerJoin(Player player) {
         if(!player.level.isClientSide() && isJoinMessageEnabled()) {
-            player.sendMessage(new TextComponent("This server is running QuickHomes " + getModVersion() + " by itsmeowdev!"), Util.NIL_UUID);
-            player.sendMessage(new TextComponent("You can use /sethome and /home with this mod installed."), Util.NIL_UUID);
+            player.sendSystemMessage(Component.literal("This server is running QuickHomes " + getModVersion() + " by itsmeowdev!"));
+            player.sendSystemMessage(Component.literal("You can use /sethome and /home with this mod installed."));
         }
     }
 
