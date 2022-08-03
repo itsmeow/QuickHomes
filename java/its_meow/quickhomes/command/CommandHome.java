@@ -54,7 +54,7 @@ public class CommandHome extends CommandBase {
 			
 			int[] data = sd.data.getIntArray(senderP.getUniqueID().toString());
 			if(data.length <= 0) {
-				throw new CommandException("Please set a home first!");
+				throw new CommandException("No Home Set");
 			} else {
 				int destWorldId = data[0];
 				int posX = data[1];
