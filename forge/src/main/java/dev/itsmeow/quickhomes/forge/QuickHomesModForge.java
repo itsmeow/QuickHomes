@@ -35,7 +35,7 @@ public class QuickHomesModForge {
 
     @SubscribeEvent
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        QuickHomesMod.onPlayerJoin(event.getPlayer());
+        QuickHomesMod.onPlayerJoin(event.getEntity());
     }
 
     @SubscribeEvent
