@@ -2,7 +2,7 @@ package dev.itsmeow.quickhomes.mixin;
 
 import dev.itsmeow.quickhomes.IStoreHome;
 import dev.itsmeow.quickhomes.QuickHomesMod;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +34,7 @@ public class ServerPlayerMixin implements IStoreHome {
         }
         if (data != null && data.contains("x") && data.contains("y") && data.contains("z") && data.contains("dim")) {
             quickhomes_homePos = new Vec3(data.getDouble("x"), data.getDouble("y"), data.getDouble("z"));
-            quickhomes_dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(data.getString("dim")));
+            quickhomes_dimension = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(data.getString("dim")));
         }
     }
 
